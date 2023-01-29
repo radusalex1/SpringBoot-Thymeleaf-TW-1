@@ -48,6 +48,25 @@ public class UserService implements UserDetailsService {
         throw new UsernameNotFoundException(email);
     }
 
+    public UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
+        Optional<UserEntity> optUser = userRepository.findByEmail(email);
+        if (optUser.isPresent()) {
+            UserEntity appUser = optUser.get();
+            return new User(
+                    appUser.getEmail(), appUser.getPassword(), true, true, true, true,
+                    /* User Roles */
+                    Objects.isNull(appUser.getRoles()) ?
+                            new ArrayList(List.of(new SimpleGrantedAuthority("default")))
+                            : appUser.getRoles()
+                            .stream()
+                            .map(RoleEntity::getName)
+                            .map(SimpleGrantedAuthority::new)
+                            .toList()
+            );
+        }
+        throw new UsernameNotFoundException(email);
+    }
+
 
     public void save(UserEntity user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -61,5 +80,13 @@ public class UserService implements UserDetailsService {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+    }
+
+    public Optional<UserEntity> getByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public UserEntity getById(Long Id){
+        return userRepository.findById(Id).get();
     }
 }

@@ -5,6 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Home page</h1>
+<form th:action="@{/QuizController/CheckTest}" th:object="${questionList}" method="post">
+    <ol>
+        <li th:each="question : ${questionList}">
+            <p th:text="${question.text}"></p>
+            <input type="text" th:name="${question.getId().toString()}"/>
+        </li>
+    </ol>
+    <button type="submit">Submit</button>
+</form>
 </body>
 </html>
