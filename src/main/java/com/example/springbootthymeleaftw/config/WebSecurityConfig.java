@@ -42,9 +42,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 question2.setCorrecAnswer("Brasov");
 
                 questionRepository.saveAll(List.of(question1,question2));
-
             }
-
         };
     }
 

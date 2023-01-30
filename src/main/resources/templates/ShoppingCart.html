@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:include="fragments/components::header">
+</head>
+<body>
+<form method="POST" class="form-signin" name="requestMarfa" th:action="@{/ShoppingCartController/updateShoppingCart}">
+    <div class="container mt-1">
+        <div class="shadow p-3 mb-5 bg-body rounded">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>product name</th>
+                    <th>price</th>
+                    <th>quantity</th>
+                    <th>UM</th>
+                    <th>valoare produs</th>
+                    <th>Sterge</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${userProductEntityList.isEmpty()}">
+                    <td colspan="2"> no data to display</td>
+                </tr>
+                <tr th:each="upe:${userProductEntityList}">
+                    <td th:text="${upe.getProduct().getName()}"></td>
+                    <td th:text="${upe.getProduct().getPrice()}"></td>
+                    <td>
+                        <input th:type="number"
+                               th:name="${upe.getUser().getId()} +'--'+${upe.getProduct().getId()}"
+                               th:number="${upe.getQuantity()}" th:value="${upe.getQuantity()}"
+                               th:disabled="${disabled}">
+                    </td>
+                    <td th:text="${upe.getProduct().getUnitate_masura()}"></td>
+                    <td th:text="${upe.getTotalValoare()}"></td>
+                    <td>
+                        <input type="checkbox" th:name="userProductEntityList" th:id="${upe.getId()}" th:value="${upe.getUser().getId()}+'--'+${upe.getProduct().getId()}">
+                    </td>
+                    <td>
+                        <input type="button" th:text="modify">
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <h1 th:text="valoare_totala"></h1>
+        <h1 th:text="*{total_cart}"></h1>
+    </div>
+    <button class="btn btn-primary btn-lg"
+            style="padding-left: 2.5rem; padding-right: 2.5rem;"
+            type="submit">
+        Update
+    </button>
+</form>
+<div th:include="fragments/components::bootstrap_script"/>
+</body>
+</html>

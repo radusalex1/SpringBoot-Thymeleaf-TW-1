@@ -38,7 +38,7 @@ public class LoginController {
     public String login(String username,Model model, String error, String logout, final RedirectAttributes redirectAttributes ){
         securityService.setAuthToken(username);
         redirectAttributes.addFlashAttribute("email",username);
-        return "redirect:/QuizController/OpenQuiz";
+        return "redirect:/ShoppingCartController/OpenShoppingCart";
     }
 
     @GetMapping("/error")
